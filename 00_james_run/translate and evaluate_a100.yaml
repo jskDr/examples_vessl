@@ -1,0 +1,31 @@
+name: translate and evaluate
+description: Run an interactive GPU-backed Streamlit, Jupyter and SSH server.
+tags:
+  - interactive
+  - jupyter
+  - ssh
+service_account_name: ""
+termination_protection: false
+import:
+  /root/.ssh/: vessl-dataset://tecace/KeyFiles
+resources:
+  cluster: vessl-onprem-a100-80g
+  preset: v1.a100-2.mem-384.cpu-14
+image: quay.io/vessl-ai/torch:2.4.0-cuda12.5-r1
+run:
+  - chmod 700 ~/.ssh/id_rsa
+  - command: git clone git@bitbucket.org:tecacedev/ai_m2m100_ft.git
+    workdir: /root/code
+  - command: |-
+      git config user.email "James.kim@tecace.com" --global
+      git config user.name "James Kim" --global
+      pip install pipx
+      pipx install poetry
+      pipx ensurepath
+      source ~/.bashrc
+      poetry install
+    workdir: /root/code/ai_m2m100_ft
+interactive:
+  max_runtime: 24h
+  jupyter:
+    idle_timeout: 24h
