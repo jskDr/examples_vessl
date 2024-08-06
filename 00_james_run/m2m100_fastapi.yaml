@@ -1,9 +1,10 @@
-name: translate and evaluate
-description: Run an interactive GPU-backed Streamlit, Jupyter and SSH server.
+name: m2m100_fastapi
+description: Run an interactive GPU-backed FastAPI, Streamlit, Jupyter and SSH server.
 tags:
   - interactive
   - jupyter
   - ssh
+  - fastapi
 service_account_name: ""
 termination_protection: false
 import:
