@@ -1,0 +1,27 @@
+name: m2m100_fastapi_8000_gpu
+description: Try to use fastapi with GPU
+tags:
+  - fastapi
+service_account_name: ""
+termination_protection: false
+import:
+  /root/code/:
+    git:
+      url: bitbucket.org/tecacedev/ai_m2m100_ft.git
+      ref: master
+      credential_name: james.kim@tecace.com
+resources:
+  cluster: vessl-gcp-oregon
+  preset: gpu-l4-small-spot
+image: quay.io/vessl-ai/torch:2.4.0-cuda12.4-r1
+run:
+  - command: chmod 700 ~/.ssh/id_rsa
+    workdir: /root
+  - command: |-
+      pip install fastapi
+      uvicorn main:app --host 0.0.0.0 --port 8000
+    workdir: /root/code/fastapi_serve
+ports:
+  - name: fastapi
+    type: http
+    port: 8000
