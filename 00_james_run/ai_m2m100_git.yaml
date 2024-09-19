@@ -1,0 +1,36 @@
+name: ai_m2m100
+description: train with sLLM for trans
+tags:
+  - interactive
+  - jupyter
+  - ssh
+service_account_name: ""
+termination_protection: false
+import:
+  /root/.ssh/: vessl-dataset://tecace/KeyFiles
+  /root/ai_m2m100_ft/:
+    git:
+      url: bitbucket.org/tecacedev/ai_m2m100_ft.git
+      ref: master
+      credential_name: james.kim@tecace.com
+resources:
+  cluster: vessl-gcp-oregon
+  preset: gpu-l4-small-spot
+image: quay.io/vessl-ai/torch:2.3.1-cuda12.1-r5
+run:
+  - |-
+    chmod 700 ~/.ssh/id_rsa
+    pip install pipx
+    pipx install poetry
+    pipx ensurepath
+    source ~/.bashrc
+  - command: |-
+      git config user.name "James Kim"
+      git config user.email "James.kim@tecace.com"
+      git remote set-url origin git@bitbucket.org:tecacedev/ai_m2m100_ft.git
+      poetry install
+    workdir: /root/ai_m2m100_ft
+interactive:
+  max_runtime: 12h
+  jupyter:
+    idle_timeout: 12h

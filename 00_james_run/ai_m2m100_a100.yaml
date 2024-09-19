@@ -21,4 +21,3 @@ interactive:
   max_runtime: 12h
   jupyter:
     idle_timeout: 12h
-a100
